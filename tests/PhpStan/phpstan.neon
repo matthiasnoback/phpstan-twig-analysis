@@ -2,11 +2,3 @@ parameters:
     twig:
         forbidden_functions: [dump]
         template_path: tests/PhpStan/Fixtures
-
-services:
-    -
-        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsRule
-        arguments:
-            - %twig.forbidden_functions%
-        tags:
-            - twig_rule

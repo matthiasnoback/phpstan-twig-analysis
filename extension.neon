@@ -1,7 +1,11 @@
+parameters:
+    twig:
+        forbidden_functions: []
+
 parametersSchema:
     twig: structure([
         template_path: string(),
-        forbidden_functions: listOf(string())
+        forbidden_functions: schema(listOf(string()), nullable())
     ])
 
 services:
@@ -12,3 +16,10 @@ services:
         arguments:
             - %twig.template_path%
             - tagged(twig_rule)
+
+    -
+        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsRule
+        arguments:
+            - %twig.forbidden_functions%
+        tags:
+            - twig_rule
