@@ -4,7 +4,6 @@ parameters:
 
 parametersSchema:
     twig: structure([
-        template_path: string(),
         forbidden_functions: schema(listOf(string()), nullable())
     ])
 
@@ -14,8 +13,7 @@ services:
         tags:
             - phpstan.rules.rule
         arguments:
-            - %twig.template_path%
-            - tagged(twig_rule)
+            twigRules: tagged(twig_rule)
 
     -
         class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsRule

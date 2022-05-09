@@ -1,4 +1,7 @@
 parameters:
     twig:
         forbidden_functions: [dump]
-        template_path: tests/PhpStan/Fixtures
+
+services:
+    twigFactory: PhpStanTwigAnalysis\PhpStan\TwigFactoryForTesting
+    twig: @twigFactory::create()

@@ -15,8 +15,6 @@ use PHPStan\Type\ObjectType;
 use PhpStanTwigAnalysis\Twig\CollectErrors;
 use PhpStanTwigAnalysis\Twig\TwigRule;
 use Twig\Environment;
-use Twig\Extension\DebugExtension;
-use Twig\Loader\FilesystemLoader;
 use Twig\NodeTraverser;
 
 /**
@@ -28,7 +26,7 @@ final class CheckTwigRulesRule implements Rule
      * @param array<TwigRule> $twigRules
      */
     public function __construct(
-        private string $templateDir,
+        private Environment $twig,
         private array $twigRules,
     ) {
     }
@@ -73,21 +71,14 @@ final class CheckTwigRulesRule implements Rule
 
         $templateName = $firstArgumentType->getValue();
 
-        $loader = new FilesystemLoader($this->templateDir);
-
-        $source = $loader->getSourceContext($templateName);
-
-        // TODO inject Twig Environment
-        $twig = new Environment($loader, [
-            'debug' => true,
-        ]);
-        $twig->addExtension(new DebugExtension());
+        $source = $this->twig->getLoader()
+            ->getSourceContext($templateName);
 
         $collectErrors = new CollectErrors($this->twigRules);
 
-        $nodeTree = $twig->parse($twig->tokenize($source));
+        $nodeTree = $this->twig->parse($this->twig->tokenize($source));
 
-        $nodeTraverser = new NodeTraverser($twig, [$collectErrors]);
+        $nodeTraverser = new NodeTraverser($this->twig, [$collectErrors]);
         $nodeTraverser->traverse($nodeTree);
 
         $phpstanErrors = [];
