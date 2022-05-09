@@ -1,0 +1,45 @@
+name: Tests
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - main
+
+jobs:
+    code_analysis:
+        strategy:
+            fail-fast: false
+            matrix:
+                actions:
+                    -
+                        name: "PHPStan"
+                        run: vendor/bin/phpstan analyze --ansi
+                    -
+                        name: "PHPUnit"
+                        run: vendor/bin/phpunit
+                    -
+                        name: "ECS"
+                        run: vendor/bin/ecs check --ansi
+                    -
+                        name: "Rector"
+                        run: vendor/bin/rector --dry-run --ansi
+                dependencies: ["lowest", "highest"]
+        name: ${{ matrix.actions.name }}
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            # see https://github.com/shivammathur/setup-php
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.0
+                    coverage: none
+
+            # composer install cache - https://github.com/ramsey/composer-install
+            -   uses: "ramsey/composer-install@v1"
+                with:
+                    dependency-versions: "${{ matrix.dependencies }}"
+
+            -   run: ${{ matrix.actions.run }}
