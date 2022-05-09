@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\PhpStan;
 
 use PHPStan\Testing\RuleTestCase;
-use PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsRule;
 
 /**
  * @extends RuleTestCase<CheckTwigRulesRule>
@@ -40,8 +39,13 @@ final class TwigRuleTest extends RuleTestCase
         $this->analyse([__DIR__ . '/Fixtures/skip-template-is-okay.php'], []);
     }
 
+    public static function getAdditionalConfigFiles(): array
+    {
+        return [__DIR__ . '/../../extension.neon', __DIR__ . '/phpstan.neon'];
+    }
+
     protected function getRule(): CheckTwigRulesRule
     {
-        return new CheckTwigRulesRule(__DIR__ . '/Fixtures', [new ForbiddenFunctionsRule(['dump'])]);
+        return self::getContainer()->getByType(CheckTwigRulesRule::class);
     }
 }

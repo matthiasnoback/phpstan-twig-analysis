@@ -1,0 +1,14 @@
+parametersSchema:
+    twig: structure([
+        template_path: string(),
+        forbidden_functions: listOf(string())
+    ])
+
+services:
+    -
+        class: PhpStanTwigAnalysis\PhpStan\CheckTwigRulesRule
+        tags:
+            - phpstan.rules.rule
+        arguments:
+            - %twig.template_path%
+            - tagged(twig_rule)
