@@ -13,23 +13,18 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PhpStanTwigAnalysis\Twig\CollectErrors;
-use PhpStanTwigAnalysis\Twig\TwigRule;
+use PhpStanTwigAnalysis\Twig\TwigAnalyzer;
+use PhpStanTwigAnalysis\Twig\TwigError;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
-use Twig\NodeTraverser;
 
 /**
  * @implements Rule<MethodCall>
  */
 final class CheckTwigRulesRule implements Rule
 {
-    /**
-     * @param array<TwigRule> $twigRules
-     */
     public function __construct(
-        private Environment $twig,
-        private array $twigRules,
+        private TwigAnalyzer $twigAnalyzer,
     ) {
     }
 
@@ -61,29 +56,18 @@ final class CheckTwigRulesRule implements Rule
 
         $templateName = $firstArgumentType->getValue();
 
-        $source = $this->twig->getLoader()
-            ->getSourceContext($templateName);
+        $twigErrors = $this->twigAnalyzer->analyze($templateName);
 
-        $collectErrors = new CollectErrors($this->twigRules);
-
-        $nodeTree = $this->twig->parse($this->twig->tokenize($source));
-
-        $nodeTraverser = new NodeTraverser($this->twig, [$collectErrors]);
-        $nodeTraverser->traverse($nodeTree);
-
-        $phpstanErrors = [];
-
-        foreach ($collectErrors->errors() as $twigError) {
-            $phpstanErrors[] = RuleErrorBuilder::message(
+        return array_map(
+            fn (TwigError $twigError) => RuleErrorBuilder::message(
                 sprintf('%s, in %s:%d', $twigError->error(), $twigError->path(), $twigError->line()),
             )->metadata([
                 'template_file' => $twigError->path(),
                 'template_line' => $twigError->line(),
             ])
-                ->build();
-        }
-
-        return $phpstanErrors;
+                ->build(),
+            $twigErrors
+        );
     }
 
     private function isCallToTwigRender(MethodCall $node, Type $objectType): bool

@@ -1,0 +1,3 @@
+services:
+    twigFactory: PhpStanTwigAnalysis\PhpStan\TwigFactoryForTesting
+    twig: @twigFactory::create()
