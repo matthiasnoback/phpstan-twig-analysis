@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\Twig;
@@ -15,8 +16,8 @@ final class TwigAnalyzer
         private Environment $twig,
         private array $twigRules,
     ) {
-
     }
+
     /**
      * @return array<TwigError>
      */

@@ -12,7 +12,7 @@ final class TwigFactoryForTesting
 {
     private static string $templateDir;
 
-    public static function setTemplateDir(string $templateDir)
+    public static function setTemplateDir(string $templateDir): void
     {
         self::$templateDir = $templateDir;
     }

@@ -63,11 +63,7 @@ final class TwigRuleTest extends RuleTestCase
     {
         TwigFactoryForTesting::setTemplateDir(__DIR__ . '/Fixtures');
 
-        return [
-            __DIR__ . '/../../extension.neon',
-            __DIR__ . '/../extension_test.neon',
-            __DIR__ . '/phpstan.neon'
-        ];
+        return [__DIR__ . '/../../extension.neon', __DIR__ . '/../extension_test.neon', __DIR__ . '/phpstan.neon'];
     }
 
     protected function getRule(): CheckTwigRulesRule

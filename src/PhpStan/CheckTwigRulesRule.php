@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
@@ -59,7 +60,7 @@ final class CheckTwigRulesRule implements Rule
         $twigErrors = $this->twigAnalyzer->analyze($templateName);
 
         return array_map(
-            fn (TwigError $twigError) => RuleErrorBuilder::message(
+            fn (TwigError $twigError): RuleError => RuleErrorBuilder::message(
                 sprintf('%s, in %s:%d', $twigError->error(), $twigError->path(), $twigError->line()),
             )->metadata([
                 'template_file' => $twigError->path(),
