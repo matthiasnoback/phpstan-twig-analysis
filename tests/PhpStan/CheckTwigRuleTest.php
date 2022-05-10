@@ -9,21 +9,16 @@ use PHPStan\Testing\RuleTestCase;
 /**
  * @extends RuleTestCase<CheckTwigRulesRule>
  */
-final class TwigRuleTest extends RuleTestCase
+final class CheckTwigRuleTest extends RuleTestCase
 {
     /**
      * @dataProvider fixturesWithACallToRender
      */
-    public function testTwigTemplateUsesForbiddenFunction(string $fixture, int $lineNumber): void
+    public function testTwigTemplateHasError(string $fixture, int $lineNumber): void
     {
         $this->analyse(
             [$fixture],
-            [
-                [
-                    'Forbidden function used: dump, in tests/PhpStan/Fixtures/uses-forbidden-function.html.twig:1',
-                    $lineNumber,
-                ],
-            ]
+            [['Error in template, in tests/PhpStan/Fixtures/template.html.twig:1', $lineNumber]]
         );
     }
 
@@ -65,11 +60,6 @@ final class TwigRuleTest extends RuleTestCase
     public function testSkipNotAConstantString(): void
     {
         $this->analyse([__DIR__ . '/Fixtures/skip-not-a-constant-string.php'], []);
-    }
-
-    public function testTemplateIsOkay(): void
-    {
-        $this->analyse([__DIR__ . '/Fixtures/skip-template-is-okay.php'], []);
     }
 
     public static function getAdditionalConfigFiles(): array

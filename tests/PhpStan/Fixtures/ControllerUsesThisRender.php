@@ -11,6 +11,6 @@ class ControllerUsesThisRender extends AbstractController
 {
     public function foo(): Response
     {
-        return $this->render('uses-forbidden-function.html.twig');
+        return $this->render('template.html.twig');
     }
 }

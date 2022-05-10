@@ -34,12 +34,6 @@ final class ForbiddenVariablesRule implements TwigRule
             return [];
         }
 
-        return [
-            new TwigError(
-                sprintf('Forbidden variable used: %s', $variableName),
-                $node->getSourceContext(),
-                $node->getTemplateLine(),
-            ),
-        ];
+        return [TwigError::createForNode($node, sprintf('Forbidden variable used: %s', $variableName))];
     }
 }

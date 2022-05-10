@@ -12,6 +12,6 @@ class ControllerUsesTwigRender
 
     public function foo(): void
     {
-        $this->twig->render('uses-forbidden-function.html.twig',);
+        $this->twig->render('template.html.twig',);
     }
 }

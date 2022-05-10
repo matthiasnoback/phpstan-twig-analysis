@@ -11,6 +11,6 @@ class ControllerUsesThisRenderView extends AbstractController
 {
     public function foo(): Response
     {
-        return new Response($this->renderView('uses-forbidden-function.html.twig'));
+        return new Response($this->renderView('template.html.twig'));
     }
 }

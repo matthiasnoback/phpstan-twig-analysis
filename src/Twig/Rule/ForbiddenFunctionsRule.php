@@ -34,12 +34,6 @@ final class ForbiddenFunctionsRule implements TwigRule
             return [];
         }
 
-        return [
-            new TwigError(
-                sprintf('Forbidden function used: %s', $functionName,),
-                $node->getSourceContext(),
-                $node->getTemplateLine(),
-            ),
-        ];
+        return [TwigError::createForNode($node, sprintf('Forbidden function used: %s', $functionName))];
     }
 }

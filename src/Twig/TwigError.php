@@ -5,15 +5,21 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\Twig;
 
 use Twig\Error\SyntaxError;
+use Twig\Node\Node;
 use Twig\Source;
 
 final class TwigError
 {
-    public function __construct(
+    private function __construct(
         private string $error,
         private ?Source $source,
         private int $line,
     ) {
+    }
+
+    public static function createForNode(Node $node, string $message): self
+    {
+        return new self($message, $node->getSourceContext(), $node->getTemplateLine(),);
     }
 
     public static function createFromSyntaxError(SyntaxError $error): self
