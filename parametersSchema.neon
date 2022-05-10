@@ -1,8 +1,10 @@
 parametersSchema:
     twig: structure([
-        forbidden_functions: schema(listOf(string()), nullable())
+        forbidden_functions: schema(listOf(string()), nullable()),
+        forbidden_variables: schema(listOf(string()), nullable()),
     ])
 
 parameters:
     twig:
         forbidden_functions: []
+        forbidden_variables: []

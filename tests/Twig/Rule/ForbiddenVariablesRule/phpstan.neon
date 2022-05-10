@@ -1,0 +1,6 @@
+includes:
+    - ../../../../forbiddenVariablesRule.neon
+
+parameters:
+    twig:
+        forbidden_variables: [app]
