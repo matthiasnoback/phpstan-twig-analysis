@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\Twig;
 
 use Twig\Environment;
+use Twig\Error\SyntaxError;
 use Twig\NodeTraverser;
 
 final class TwigAnalyzer
@@ -28,7 +29,11 @@ final class TwigAnalyzer
 
         $collectErrors = new CollectErrors($this->twigRules);
 
-        $nodeTree = $this->twig->parse($this->twig->tokenize($source));
+        try {
+            $nodeTree = $this->twig->parse($this->twig->tokenize($source));
+        } catch (SyntaxError $error) {
+            return [TwigError::createFromSyntaxError($error)];
+        }
 
         $nodeTraverser = new NodeTraverser($this->twig, [$collectErrors]);
         $nodeTraverser->traverse($nodeTree);

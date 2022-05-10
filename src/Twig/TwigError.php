@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\Twig;
 
+use Twig\Error\SyntaxError;
 use Twig\Source;
 
 final class TwigError
@@ -13,6 +14,11 @@ final class TwigError
         private ?Source $source,
         private int $line,
     ) {
+    }
+
+    public static function createFromSyntaxError(SyntaxError $error): self
+    {
+        return new self($error->getMessage(), $error->getSourceContext(), $error->getLine());
     }
 
     public function path(): string

@@ -10,17 +10,14 @@ use Twig\Loader\FilesystemLoader;
 
 final class TwigFactoryForTesting
 {
-    private static string $templateDir;
-
-    public static function setTemplateDir(string $templateDir): void
+    public function __construct(private string $templateDir)
     {
-        self::$templateDir = $templateDir;
     }
 
     public function create(): Environment
     {
         $loader = new FilesystemLoader();
-        $loader->addPath(self::$templateDir);
+        $loader->addPath($this->templateDir);
 
         $twig = new Environment($loader, [
             'debug' => true,

@@ -5,21 +5,34 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\Twig\Rule;
 
 use PHPStan\Testing\PHPStanTestCase;
-use PhpStanTwigAnalysis\PhpStan\TwigFactoryForTesting;
 use PhpStanTwigAnalysis\Twig\TwigAnalyzer;
 use PhpStanTwigAnalysis\Twig\TwigError;
+use ReflectionClass;
 
 abstract class AbstractTwigRuleTest extends PHPStanTestCase
 {
     public static function getAdditionalConfigFiles(): array
     {
-        TwigFactoryForTesting::setTemplateDir(static::getTemplateDirname());
+        $testClass = new ReflectionClass(static::class);
+        $testFilename = $testClass->getFileName();
+        assert(is_string($testFilename));
 
-        return [
-            __DIR__ . '/../../../extension.neon',
-            __DIR__ . '/../../extension_test.neon',
-            static::getConfigFilePathname(),
-        ];
+        $fixturesDir = dirname($testFilename) . '/Fixtures';
+        $config = <<<NEON
+        parameters:
+            template_dir: $fixturesDir
+        NEON;
+        $configFile = sys_get_temp_dir() . '/' . $testClass->getName() . '.neon';
+        file_put_contents($configFile, $config);
+
+        $configFiles = [__DIR__ . '/../../../extension.neon', __DIR__ . '/../../extension_test.neon', $configFile];
+
+        $extraConfigFile = static::getExtraConfigFilePathname();
+        if ($extraConfigFile !== null) {
+            $configFiles[] = $extraConfigFile;
+        }
+
+        return $configFiles;
     }
 
     /**
@@ -47,7 +60,8 @@ abstract class AbstractTwigRuleTest extends PHPStanTestCase
         self::assertEquals($expectedErrorsAsString, $actualErrorsAsString);
     }
 
-    abstract protected static function getTemplateDirname(): string;
-
-    abstract protected static function getConfigFilePathname(): string;
+    protected static function getExtraConfigFilePathname(): ?string
+    {
+        return null;
+    }
 }

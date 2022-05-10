@@ -1,3 +1,10 @@
+parametersSchema:
+    template_dir: string()
+
 services:
-    twigFactory: PhpStanTwigAnalysis\PhpStan\TwigFactoryForTesting
+    twigFactory:
+        class: PhpStanTwigAnalysis\PhpStan\TwigFactoryForTesting
+        arguments:
+            templateDir: %template_dir%
+
     twig: @twigFactory::create()

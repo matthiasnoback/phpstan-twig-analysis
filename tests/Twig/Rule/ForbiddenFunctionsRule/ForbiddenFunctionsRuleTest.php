@@ -21,12 +21,7 @@ final class ForbiddenFunctionsRuleTest extends AbstractTwigRuleTest
         );
     }
 
-    protected static function getTemplateDirname(): string
-    {
-        return __DIR__ . '/Fixtures';
-    }
-
-    protected static function getConfigFilePathname(): string
+    protected static function getExtraConfigFilePathname(): string
     {
         return __DIR__ . '/phpstan.neon';
     }
