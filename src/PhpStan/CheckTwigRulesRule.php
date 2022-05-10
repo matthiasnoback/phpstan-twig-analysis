@@ -12,8 +12,10 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PhpStanTwigAnalysis\Twig\CollectErrors;
 use PhpStanTwigAnalysis\Twig\TwigRule;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
 use Twig\NodeTraverser;
 
@@ -41,19 +43,7 @@ final class CheckTwigRulesRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $twigEnvironment = new ObjectType(Environment::class);
-        if (! $twigEnvironment
-            ->isSuperTypeOf($scope->getType($node->var))
-            ->yes()) {
-            // The object is not a Twig `Environment` instance
-            return [];
-        }
-        if (! $node->name instanceof Identifier) {
-            // The method is called dynamically, or is not `render()`
-            return [];
-        }
-        if ($node->name->toString() !== 'render') {
-            // The method is called dynamically, or is not `render()`
+        if (! $this->isCallToTwigRender($node, $scope->getType($node->var))) {
             return [];
         }
 
@@ -94,5 +84,23 @@ final class CheckTwigRulesRule implements Rule
         }
 
         return $phpstanErrors;
+    }
+
+    private function isCallToTwigRender(MethodCall $node, Type $objectType): bool
+    {
+        if ((new ObjectType(Environment::class))
+            ->isSuperTypeOf($objectType)
+            ->yes()) {
+            return $node->name instanceof Identifier && $node->name->toString() === 'render';
+        }
+
+        if ((new ObjectType(AbstractController::class))
+            ->isSuperTypeOf($objectType)
+            ->yes()) {
+            return $node->name instanceof Identifier &&
+                ($node->name->toString() === 'render' || $node->name->toString() === 'renderView');
+        }
+
+        return false;
     }
 }

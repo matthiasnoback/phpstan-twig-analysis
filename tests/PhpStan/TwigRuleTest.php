@@ -11,12 +11,32 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class TwigRuleTest extends RuleTestCase
 {
-    public function testTwigTemplateUsesForbiddenFunction(): void
+    /**
+     * @dataProvider fixturesWithACallToRender
+     */
+    public function testTwigTemplateUsesForbiddenFunction(string $fixture, int $lineNumber): void
     {
         $this->analyse(
-            [__DIR__ . '/Fixtures/twig-template-uses-forbidden-function.php'],
-            [['Forbidden function used: dump, in tests/PhpStan/Fixtures/uses-forbidden-function.html.twig:1', 13]]
+            [$fixture],
+            [
+                [
+                    'Forbidden function used: dump, in tests/PhpStan/Fixtures/uses-forbidden-function.html.twig:1',
+                    $lineNumber,
+                ],
+            ]
         );
+    }
+
+    /**
+     * @return array<string,array{string,int}>
+     */
+    public function fixturesWithACallToRender(): array
+    {
+        return [
+            'Basic Twig Environment' => [__DIR__ . '/Fixtures/ControllerUsesTwigRender.php', 15],
+            'Symfony AbstractController::render()' => [__DIR__ . '/Fixtures/ControllerUsesThisRender.php', 14],
+            'Symfony AbstractController::renderView()' => [__DIR__ . '/Fixtures/ControllerUsesThisRenderView.php', 14],
+        ];
     }
 
     public function testSkipNotACallToTwigEnvironment(): void

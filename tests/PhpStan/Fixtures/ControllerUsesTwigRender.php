@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+namespace PhpStanTwigAnalysis\PhpStan\Fixtures;
+
 use Twig\Environment;
 
-class Foo
+class ControllerUsesTwigRender
 {
     private Environment $twig;
 
