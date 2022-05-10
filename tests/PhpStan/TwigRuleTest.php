@@ -27,6 +27,19 @@ final class TwigRuleTest extends RuleTestCase
         );
     }
 
+    public function testTwigTemplateNotFound(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/Fixtures/TemplateNotFound.php'],
+            [
+                [
+                    'Unable to find template "non-existing-template.html.twig" (looked into: tests/PhpStan/Fixtures).',
+                    15,
+                ],
+            ]
+        );
+    }
+
     /**
      * @return array<string,array{string,int}>
      */

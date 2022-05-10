@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\Twig;
 
 use Twig\Environment;
+use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
 use Twig\NodeTraverser;
 
@@ -21,6 +22,7 @@ final class TwigAnalyzer
 
     /**
      * @return array<TwigError>
+     * @throws LoaderError
      */
     public function analyze(string $templateName): array
     {

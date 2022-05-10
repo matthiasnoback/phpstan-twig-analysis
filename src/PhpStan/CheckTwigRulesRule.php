@@ -18,6 +18,7 @@ use PhpStanTwigAnalysis\Twig\TwigAnalyzer;
 use PhpStanTwigAnalysis\Twig\TwigError;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
+use Twig\Error\LoaderError;
 
 /**
  * @implements Rule<MethodCall>
@@ -57,7 +58,11 @@ final class CheckTwigRulesRule implements Rule
 
         $templateName = $firstArgumentType->getValue();
 
-        $twigErrors = $this->twigAnalyzer->analyze($templateName);
+        try {
+            $twigErrors = $this->twigAnalyzer->analyze($templateName);
+        } catch (LoaderError $loaderError) {
+            return [RuleErrorBuilder::message($loaderError->getMessage())->build()];
+        }
 
         return array_map(
             fn (TwigError $twigError): RuleError => RuleErrorBuilder::message(
