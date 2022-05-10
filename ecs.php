@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
+use Symplify\CodingStandard\Fixer\Naming\StandardizeHereNowDocKeywordFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
@@ -20,5 +21,7 @@ return static function (ECSConfig $ecsConfig): void {
 
         // allow @throws
         GeneralPhpdocAnnotationRemoveFixer::class,
+        // We don't want all here/now docs to become CODESAMPLE block
+        StandardizeHereNowDocKeywordFixer::class,
     ]);
 };

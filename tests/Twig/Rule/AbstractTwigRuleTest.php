@@ -20,7 +20,7 @@ abstract class AbstractTwigRuleTest extends PHPStanTestCase
         $fixturesDir = dirname($testFilename) . '/Fixtures';
         $config = <<<NEON
         parameters:
-            template_dir: $fixturesDir
+            template_dir: ${fixturesDir}
         NEON;
         $configFile = sys_get_temp_dir() . '/' . $testClass->getName() . '.neon';
         file_put_contents($configFile, $config);
