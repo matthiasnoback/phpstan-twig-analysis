@@ -1,3 +1,7 @@
+includes:
+    - ../parametersSchema.neon
+    - ../services.neon
+
 parametersSchema:
     template_dir: string()
 

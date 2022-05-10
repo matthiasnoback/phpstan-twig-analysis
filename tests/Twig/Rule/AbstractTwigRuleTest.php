@@ -25,7 +25,7 @@ abstract class AbstractTwigRuleTest extends PHPStanTestCase
         $configFile = sys_get_temp_dir() . '/' . $testClass->getName() . '.neon';
         file_put_contents($configFile, $config);
 
-        $configFiles = [__DIR__ . '/../../../extension.neon', __DIR__ . '/../../extension_test.neon', $configFile];
+        $configFiles = [__DIR__ . '/../../extension_test.neon', $configFile];
 
         $extraConfigFile = static::getExtraConfigFilePathname();
         if ($extraConfigFile !== null) {

@@ -1,26 +1,4 @@
-parameters:
-    twig:
-        forbidden_functions: []
-
-parametersSchema:
-    twig: structure([
-        forbidden_functions: schema(listOf(string()), nullable())
-    ])
-
-services:
-    -
-        class: PhpStanTwigAnalysis\PhpStan\CheckTwigRulesRule
-        tags:
-            - phpstan.rules.rule
-
-    -
-        class: PhpStanTwigAnalysis\Twig\TwigAnalyzer
-        arguments:
-            twigRules: tagged(twig_rule)
-
-    -
-        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsRule
-        arguments:
-            - %twig.forbidden_functions%
-        tags:
-            - twig_rule
+includes:
+    - parametersSchema.neon
+    - services.neon
+    - all_rules.neon

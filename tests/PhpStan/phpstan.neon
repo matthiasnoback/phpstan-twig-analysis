@@ -1,3 +1,6 @@
+includes:
+    - ../../forbiddenFunctionsRule.neon
+
 parameters:
     template_dir: tests/PhpStan/Fixtures/
     twig:

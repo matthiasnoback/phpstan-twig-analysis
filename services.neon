@@ -1,0 +1,10 @@
+services:
+    -
+        class: PhpStanTwigAnalysis\PhpStan\CheckTwigRulesRule
+        tags:
+            - phpstan.rules.rule
+
+    -
+        class: PhpStanTwigAnalysis\Twig\TwigAnalyzer
+        arguments:
+            twigRules: tagged(twig_rule)
