@@ -1,0 +1,5 @@
+services:
+    -
+        class: PhpStanTwigAnalysis\Twig\Rule\NoDynamicIncludes
+        tags:
+            - twig_rule
