@@ -8,12 +8,9 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
 use Twig\NodeTraverser;
-use Twig\TwigFunction;
 
 final class TwigAnalyzer
 {
-    private bool $catchAllNonExistingTwigFunctions = true;
-
     /**
      * @param array<TwigRule> $twigRules
      */
@@ -34,8 +31,7 @@ final class TwigAnalyzer
         $twigAnalysis->addAnalyzedTemplate($templateName);
 
         // We have our own rules for finding undefined functions and don't want the parser to trigger a "SyntaxError"
-        $this->twig->registerUndefinedFunctionCallback([$this, 'returnNoopTwigFunction']);
-        $this->catchAllNonExistingTwigFunctions = true;
+        UnknownFunctionCallback::catchAllUnknownFunctions($this->twig, true);
 
         try {
             $nodeTree = $this->twig->parse($this->twig->tokenize($source));
@@ -44,7 +40,7 @@ final class TwigAnalyzer
             return;
         }
 
-        $this->catchAllNonExistingTwigFunctions = false;
+        UnknownFunctionCallback::catchAllUnknownFunctions($this->twig, false);
 
         // Set the parent node as an attribute on each node, so rules can access traverse up the node tree:
         $nodeTraverser = new NodeTraverser($this->twig, [new SetParentNodeAsAttribute()]);
@@ -58,15 +54,5 @@ final class TwigAnalyzer
 
         $twigAnalysis->addErrors($collectErrors->errors());
         $twigAnalysis->addTemplatesToBeAnalyzed($collectIncludes->includedTemplateNames());
-    }
-
-    public function returnNoopTwigFunction(string $name): ?TwigFunction
-    {
-        if ($this->catchAllNonExistingTwigFunctions) {
-            return new TwigFunction($name, function (): void {
-            });
-        }
-
-        return null;
     }
 }
