@@ -32,14 +32,6 @@ final class TwigAnalysis
     }
 
     /**
-     * @return array<string>
-     */
-    public function analyzedTemplates(): array
-    {
-        return $this->analyzedTemplates;
-    }
-
-    /**
      * @param array<TwigError> $moreErrors
      */
     public function addErrors(array $moreErrors): void
@@ -57,7 +49,13 @@ final class TwigAnalysis
      */
     public function addTemplatesToBeAnalyzed(array $moreTemplates): void
     {
-        $this->templatesToBeAnalyzed = array_merge($this->templatesToBeAnalyzed, $moreTemplates);
+        foreach ($moreTemplates as $template) {
+            if (in_array($template, $this->analyzedTemplates, true)) {
+                continue;
+            }
+
+            $this->templatesToBeAnalyzed[] = $template;
+        }
     }
 
     public function nextTemplate(): string|null

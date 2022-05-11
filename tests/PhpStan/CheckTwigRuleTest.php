@@ -33,6 +33,23 @@ final class CheckTwigRuleTest extends RuleTestCase
         );
     }
 
+    public function testTwigTemplateRecursivelyIncludesAnotherTemplate(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/Fixtures/TemplateRecursivelyIncludesAnotherTemplate.php'],
+            [
+                [
+                    'Error in template, in tests/PhpStan/Fixtures/template-recursively-includes-another-template.html.twig:1',
+                    15,
+                ],
+                [
+                    'Error in template, in tests/PhpStan/Fixtures/includes-recursively-including-template.html.twig:1',
+                    15,
+                ],
+            ],
+        );
+    }
+
     public function testTwigTemplateNotFound(): void
     {
         $this->analyse(
