@@ -2,9 +2,12 @@ parametersSchema:
     twig: structure([
         forbidden_functions: schema(listOf(string()), nullable()),
         forbidden_variables: schema(listOf(string()), nullable()),
+        maximum_number_of_dots: schema(integer(), nullable())
     ])
 
 parameters:
     twig:
         forbidden_functions: []
         forbidden_variables: []
+        maximum_number_of_dots: null
+

@@ -37,6 +37,10 @@ final class TwigAnalyzer
             return;
         }
 
+        // Set the parent node as an attribute on each node, so rules can access traverse up the node tree:
+        $nodeTraverser = new NodeTraverser($this->twig, [new SetParentNodeAsAttribute()]);
+        $nodeTraverser->traverse($nodeTree);
+
         $collectErrors = new CollectErrors($this->twigRules);
         $collectIncludes = new CollectIncludes();
 
