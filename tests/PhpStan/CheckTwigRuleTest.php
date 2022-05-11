@@ -22,6 +22,17 @@ final class CheckTwigRuleTest extends RuleTestCase
         );
     }
 
+    public function testTwigTemplateIncludesAnotherTemplate(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/Fixtures/TemplateIncludesAnotherTemplate.php'],
+            [
+                ['Error in template, in tests/PhpStan/Fixtures/template-includes-another-template.html.twig:1', 15],
+                ['Error in template, in tests/PhpStan/Fixtures/another-template.html.twig:1', 15],
+            ],
+        );
+    }
+
     public function testTwigTemplateNotFound(): void
     {
         $this->analyse(

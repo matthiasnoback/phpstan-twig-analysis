@@ -21,25 +21,29 @@ final class TwigAnalyzer
     }
 
     /**
-     * @return array<TwigError>
      * @throws LoaderError
      */
-    public function analyze(string $templateName): array
+    public function analyze(string $templateName, TwigAnalysis $twigAnalysis): void
     {
         $source = $this->twig->getLoader()
             ->getSourceContext($templateName);
 
-        $collectErrors = new CollectErrors($this->twigRules);
+        $twigAnalysis->addAnalyzedTemplate($templateName);
 
         try {
             $nodeTree = $this->twig->parse($this->twig->tokenize($source));
         } catch (SyntaxError $error) {
-            return [TwigError::createFromSyntaxError($error)];
+            $twigAnalysis->addError(TwigError::createFromSyntaxError($error));
+            return;
         }
 
-        $nodeTraverser = new NodeTraverser($this->twig, [$collectErrors]);
+        $collectErrors = new CollectErrors($this->twigRules);
+        $collectIncludes = new CollectIncludes();
+
+        $nodeTraverser = new NodeTraverser($this->twig, [$collectErrors, $collectIncludes]);
         $nodeTraverser->traverse($nodeTree);
 
-        return $collectErrors->errors();
+        $twigAnalysis->addErrors($collectErrors->errors());
+        $twigAnalysis->addTemplatesToBeAnalyzed($collectIncludes->includedTemplateNames());
     }
 }

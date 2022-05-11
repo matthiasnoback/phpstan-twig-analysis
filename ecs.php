@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use Symplify\CodingStandard\Fixer\Naming\StandardizeHereNowDocKeywordFixer;
@@ -23,5 +24,7 @@ return static function (ECSConfig $ecsConfig): void {
         GeneralPhpdocAnnotationRemoveFixer::class,
         // We don't want all here/now docs to become CODESAMPLE block
         StandardizeHereNowDocKeywordFixer::class,
+        // Allow assignment in while at least
+        AssignmentInConditionSniff::class,
     ]);
 };

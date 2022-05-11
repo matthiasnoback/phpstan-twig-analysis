@@ -14,6 +14,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PhpStanTwigAnalysis\Twig\TwigAnalysis;
 use PhpStanTwigAnalysis\Twig\TwigAnalyzer;
 use PhpStanTwigAnalysis\Twig\TwigError;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,10 +59,20 @@ final class CheckTwigRulesRule implements Rule
 
         $templateName = $firstArgumentType->getValue();
 
-        try {
-            $twigErrors = $this->twigAnalyzer->analyze($templateName);
-        } catch (LoaderError $loaderError) {
-            return [RuleErrorBuilder::message($loaderError->getMessage())->build()];
+        return $this->keepAnalyzingUntilDone(TwigAnalysis::startWith($templateName));
+    }
+
+    /**
+     * @return array<RuleError>
+     */
+    private function keepAnalyzingUntilDone(TwigAnalysis $twigAnalysis): array
+    {
+        while ($templateName = $twigAnalysis->nextTemplate()) {
+            try {
+                $this->twigAnalyzer->analyze($templateName, $twigAnalysis);
+            } catch (LoaderError $loaderError) {
+                return [RuleErrorBuilder::message($loaderError->getMessage())->build()];
+            }
         }
 
         return array_map(
@@ -72,7 +83,7 @@ final class CheckTwigRulesRule implements Rule
                 'template_line' => $twigError->line(),
             ])
                 ->build(),
-            $twigErrors
+            $twigAnalysis->collectedErrors()
         );
     }
 
