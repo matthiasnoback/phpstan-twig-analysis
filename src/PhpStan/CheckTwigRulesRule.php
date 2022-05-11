@@ -76,13 +76,7 @@ final class CheckTwigRulesRule implements Rule
         }
 
         return array_map(
-            fn (TwigError $twigError): RuleError => RuleErrorBuilder::message(
-                sprintf('%s, in %s:%d', $twigError->error(), $twigError->path(), $twigError->line()),
-            )->metadata([
-                'template_file' => $twigError->path(),
-                'template_line' => $twigError->line(),
-            ])
-                ->build(),
+            fn (TwigError $twigError): RuleError => $twigError->asPhpStanError(),
             $twigAnalysis->collectedErrors()
         );
     }

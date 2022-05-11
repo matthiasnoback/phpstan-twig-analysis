@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\Twig;
@@ -11,10 +12,8 @@ final class TwigNodeFinder
      * @param callable(Node): bool $filter
      * @return array<Node>
      */
-    public static function filterParents(
-        Node $node,
-        callable $filter,
-    ): array {
+    public static function filterParents(Node $node, callable $filter): array
+    {
         $matchingNodes = [];
 
         $currentNode = $node;

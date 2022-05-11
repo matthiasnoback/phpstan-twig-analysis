@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\Twig\Rule;
@@ -7,7 +8,6 @@ use PhpStanTwigAnalysis\Twig\TwigError;
 use PhpStanTwigAnalysis\Twig\TwigNodeFinder;
 use PhpStanTwigAnalysis\Twig\TwigRule;
 use Twig\Node\Expression\GetAttrExpression;
-use Twig\Node\Expression\NameExpression;
 use Twig\Node\Node;
 
 final class LawOfDemeterRule implements TwigRule
@@ -27,6 +27,7 @@ final class LawOfDemeterRule implements TwigRule
     public function processNode(Node $node): array
     {
         if ($this->maximumNumberOfDots === null) {
+            // The rule is not enabled
             return [];
         }
 
@@ -36,14 +37,21 @@ final class LawOfDemeterRule implements TwigRule
         }
 
         $numberOfGetAttrExpressionsBeforeUs = count(TwigNodeFinder::filterParents(
-            $node, fn (Node $node) => $node instanceof GetAttrExpression
+            $node,
+            fn (Node $node): bool => $node instanceof GetAttrExpression
         ));
+
+        // +1 because this node is a GetAttrExpression itself
         if ($numberOfGetAttrExpressionsBeforeUs + 1 <= $this->maximumNumberOfDots) {
             return [];
         }
 
         return [
-            TwigError::createForNode($node, sprintf('Template uses more than the allowed number of dots (%d)', $this->maximumNumberOfDots))
+            TwigError::createForNode(
+                $node,
+                sprintf('Template uses more than the allowed number of dots (%d)', $this->maximumNumberOfDots),
+                'You can change this number with the setting <fg=cyan>twig.maximum_number_of_dots</> in your <fg=cyan>%configurationFile%</>'
+            ),
         ];
     }
 }
