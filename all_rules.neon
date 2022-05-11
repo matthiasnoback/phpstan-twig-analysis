@@ -1,4 +1,5 @@
 includes:
+    - functionNotFoundRule.neon
     - forbiddenFunctionsRule.neon
     - forbiddenVariablesRule.neon
     - noDynamicIncludesRule.neon
