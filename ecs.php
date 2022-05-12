@@ -18,7 +18,8 @@ return static function (ECSConfig $ecsConfig): void {
         PhpUnitStrictFixer::class,
         // Because it makes no sense ;) (well, I just need assertEquals())
         // fixture files
-        'tests/PhpStan/Fixtures',
+        __DIR__ . '/tests/PhpStan/Fixtures',
+        __DIR__ . '/tests/Symfony/var',
 
         // allow @throws
         GeneralPhpdocAnnotationRemoveFixer::class,

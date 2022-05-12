@@ -9,7 +9,9 @@
         "phpstan/extension-installer": "^1.1",
         "nikic/php-parser": "^4.13.2",
         "symfony/framework-bundle": "^6.0",
-        "symfony/twig-bundle": "^6.0"
+        "symfony/twig-bundle": "^6.0",
+        "symfony/yaml": "^6.0",
+        "symfony/filesystem": "^6.0"
     },
     "require": {
         "twig/twig": "^3.3",

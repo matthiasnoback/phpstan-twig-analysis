@@ -1,0 +1,7 @@
+framework:
+    secret: 'notSecret'
+
+services:
+    public_twig:
+        alias: twig
+        public: true

@@ -29,9 +29,10 @@ return static function (
 
     $config->skip(
         [
+            __DIR__ . '/tests/PhpStan/Fixtures/',
+            __DIR__ . '/tests/Symfony/var',
             AddArrayReturnDocTypeRector::class,
             ChangeAndIfToEarlyReturnRector::class,
-            __DIR__ . 'tests/PhpStan/Fixtures',
         ]
     );
 

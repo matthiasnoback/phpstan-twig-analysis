@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\Twig\Rule;
 
 use PhpStanTwigAnalysis\Twig\TwigError;
+use PhpStanTwigAnalysis\Twig\TwigFactory;
 use PhpStanTwigAnalysis\Twig\TwigRule;
 use Twig\Environment;
 use Twig\Node\Expression\FunctionExpression;
@@ -13,8 +14,11 @@ use Twig\TwigFunction;
 
 final class FunctionNotFoundRule implements TwigRule
 {
-    public function __construct(private Environment $twig)
+    private Environment $twig;
+
+    public function __construct(private TwigFactory $twigFactory)
     {
+        $this->twig = $this->twigFactory->create();
     }
 
     public function getNodeType(): string

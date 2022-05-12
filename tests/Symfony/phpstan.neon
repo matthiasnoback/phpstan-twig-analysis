@@ -1,0 +1,4 @@
+parameters:
+    symfony_twig_factory:
+        container_php_file_path: tests/Symfony/var/PhpStanTwigAnalysis_Symfony_AppKernelDevDebugContainer.php
+        twig_service_name: public_twig

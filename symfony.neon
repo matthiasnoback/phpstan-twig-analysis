@@ -1,0 +1,16 @@
+parametersSchema:
+    symfony_twig_factory: structure([
+        container_php_file_path: string(),
+        twig_service_name: string(),
+    ])
+
+parameters:
+    symfony_twig_factory:
+        twig_service_name: twig
+
+services:
+    -
+        class: PhpStanTwigAnalysis\Twig\Symfony\SymfonyContainerTwigFactory
+        arguments:
+            - %symfony_twig_factory.container_php_file_path%
+            - %symfony_twig_factory.twig_service_name%

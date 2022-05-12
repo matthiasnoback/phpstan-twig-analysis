@@ -1,2 +1,2 @@
 includes:
-    - ../../../../noDynamicIncludes.neon
+    - ../../../../noDynamicIncludesRule.neon

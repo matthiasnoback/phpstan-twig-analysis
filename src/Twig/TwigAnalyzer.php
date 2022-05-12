@@ -11,13 +11,16 @@ use Twig\NodeTraverser;
 
 final class TwigAnalyzer
 {
+    private Environment $twig;
+
     /**
      * @param array<TwigRule> $twigRules
      */
     public function __construct(
-        private Environment $twig,
+        TwigFactory $twigFactory,
         private array $twigRules,
     ) {
+        $this->twig = $twigFactory->create();
     }
 
     /**

@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\PhpStan;
 
+use PhpStanTwigAnalysis\Twig\TwigFactory;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
-final class TwigFactoryForTesting
+final class TwigFactoryForTesting implements TwigFactory
 {
     public function __construct(private string $templateDir)
     {
