@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpStanTwigAnalysis\Twig\Rule\FilterNotFound;
+namespace PhpStanTwigAnalysis\Twig\Rule\FilterNotFoundRule;
 
 use PhpStanTwigAnalysis\Twig\Rule\AbstractTwigRuleTest;
 
-final class FilterNotFoundTest extends AbstractTwigRuleTest
+final class FilterNotFoundRuleTest extends AbstractTwigRuleTest
 {
     public function testSkipTemplateUsesExistingFilter(): void
     {
@@ -17,7 +17,12 @@ final class FilterNotFoundTest extends AbstractTwigRuleTest
     {
         $this->assertTwigAnalysisErrors(
             'template-uses-unknown-filter.html.twig',
-            [['Unknown "unknownFilter" filter.', 2]]
+            [['Unknown Twig filter: unknownFilter', 2], ['Unknown Twig filter: anotherUnknownFilter', 5]]
         );
+    }
+
+    protected static function getExtraConfigFilePathname(): ?string
+    {
+        return __DIR__ . '/phpstan.neon';
     }
 }

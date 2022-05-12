@@ -32,6 +32,7 @@ final class TwigAnalyzer
 
         // We have our own rules for finding undefined functions and don't want the parser to trigger a "SyntaxError"
         UnknownFunctionCallback::catchAllUnknownFunctions($this->twig, true);
+        UnknownFilterCallback::catchAllUnknownFilters($this->twig, true);
 
         try {
             $nodeTree = $this->twig->parse($this->twig->tokenize($source));
@@ -41,6 +42,7 @@ final class TwigAnalyzer
         }
 
         UnknownFunctionCallback::catchAllUnknownFunctions($this->twig, false);
+        UnknownFilterCallback::catchAllUnknownFilters($this->twig, false);
 
         // Set the parent node as an attribute on each node, so rules can access traverse up the node tree:
         $nodeTraverser = new NodeTraverser($this->twig, [new SetParentNodeAsAttribute()]);
