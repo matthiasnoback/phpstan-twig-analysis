@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpStanTwigAnalysis\Twig\Rule\ForbiddenVariablesRule;
+namespace PhpStanTwigAnalysis\Twig\Rule\ForbiddenVariablesTwigRule;
 
 use PhpStanTwigAnalysis\Twig\Rule\AbstractTwigRuleTest;
 
-final class ForbiddenVariablesRuleTest extends AbstractTwigRuleTest
+final class ForbiddenVariablesTwigRuleTest extends AbstractTwigRuleTest
 {
     public function testSkipTemplateUsesNoForbiddenVariables(): void
     {

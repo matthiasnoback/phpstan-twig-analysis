@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsRule;
+namespace PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsTwigRule;
 
 use PhpStanTwigAnalysis\Twig\Rule\AbstractTwigRuleTest;
 
-final class ForbiddenFunctionsRuleTest extends AbstractTwigRuleTest
+final class ForbiddenFunctionsTwigRuleTest extends AbstractTwigRuleTest
 {
     public function testSkipTemplateUsesNoForbiddenFunctions(): void
     {

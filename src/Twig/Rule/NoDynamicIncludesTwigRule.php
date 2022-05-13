@@ -10,7 +10,7 @@ use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
 
-final class NoDynamicIncludes implements TwigRule
+final class NoDynamicIncludesTwigRule implements TwigRule
 {
     public function getNodeType(): string
     {

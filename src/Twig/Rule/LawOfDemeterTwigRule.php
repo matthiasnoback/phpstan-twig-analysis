@@ -10,7 +10,7 @@ use PhpStanTwigAnalysis\Twig\TwigRule;
 use Twig\Node\Expression\GetAttrExpression;
 use Twig\Node\Node;
 
-final class LawOfDemeterRule implements TwigRule
+final class LawOfDemeterTwigRule implements TwigRule
 {
     public function __construct(private ?int $maximumNumberOfDots)
     {

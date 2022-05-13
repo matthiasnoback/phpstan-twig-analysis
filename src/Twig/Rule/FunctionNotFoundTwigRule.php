@@ -8,11 +8,11 @@ use PhpStanTwigAnalysis\Twig\TwigError;
 use PhpStanTwigAnalysis\Twig\TwigFactory;
 use PhpStanTwigAnalysis\Twig\TwigRule;
 use Twig\Environment;
-use Twig\Node\Expression\FilterExpression;
+use Twig\Node\Expression\FunctionExpression;
 use Twig\Node\Node;
-use Twig\TwigFilter;
+use Twig\TwigFunction;
 
-final class FilterNotFoundRule implements TwigRule
+final class FunctionNotFoundTwigRule implements TwigRule
 {
     private Environment $twig;
 
@@ -23,23 +23,22 @@ final class FilterNotFoundRule implements TwigRule
 
     public function getNodeType(): string
     {
-        return FilterExpression::class;
+        return FunctionExpression::class;
     }
 
     /**
-     * @param FilterExpression $node
+     * @param FunctionExpression $node
      */
     public function processNode(Node $node): array
     {
-        $filterName = $node->getNode('filter')
-            ->getAttribute('value');
+        $functionName = $node->getAttribute('name');
 
-        $filter = $this->twig->getFilter($filterName);
+        $function = $this->twig->getFunction($functionName);
 
-        if ($filter instanceof TwigFilter) {
+        if ($function instanceof TwigFunction) {
             return [];
         }
 
-        return [TwigError::createForNode($node, sprintf('Unknown Twig filter: %s', $filterName))];
+        return [TwigError::createForNode($node, sprintf('Call to unknown Twig function: %s()', $functionName))];
     }
 }

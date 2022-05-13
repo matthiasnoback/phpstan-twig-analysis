@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpStanTwigAnalysis\Twig\Rule\LawOfDemeterRule;
+namespace PhpStanTwigAnalysis\Twig\Rule\LawOfDemeterTwigRule;
 
 use PhpStanTwigAnalysis\Twig\Rule\AbstractTwigRuleTest;
 
-final class LawOfDemeterRuleTest extends AbstractTwigRuleTest
+final class LawOfDemeterTwigRuleTest extends AbstractTwigRuleTest
 {
     public function testSkipTemplateUsesConstantInclude(): void
     {

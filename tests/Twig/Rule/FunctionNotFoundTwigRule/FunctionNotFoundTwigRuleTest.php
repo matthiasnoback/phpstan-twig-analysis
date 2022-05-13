@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpStanTwigAnalysis\Twig\Rule\FunctionNotFoundRule;
+namespace PhpStanTwigAnalysis\Twig\Rule\FunctionNotFoundTwigRule;
 
 use PhpStanTwigAnalysis\Twig\Rule\AbstractTwigRuleTest;
 
-final class FunctionNotFoundRuleTest extends AbstractTwigRuleTest
+final class FunctionNotFoundTwigRuleTest extends AbstractTwigRuleTest
 {
     public function testSkipTemplateUsesExistingFunction(): void
     {

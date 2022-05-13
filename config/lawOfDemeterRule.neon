@@ -1,6 +1,6 @@
 services:
     -
-        class: PhpStanTwigAnalysis\Twig\Rule\LawOfDemeterRule
+        class: PhpStanTwigAnalysis\Twig\Rule\LawOfDemeterTwigRule
         tags:
             - twig_rule
         arguments:

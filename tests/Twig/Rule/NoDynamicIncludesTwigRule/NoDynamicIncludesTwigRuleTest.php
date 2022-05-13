@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpStanTwigAnalysis\Twig\Rule\NoDynamicIncludesRule;
+namespace PhpStanTwigAnalysis\Twig\Rule\NoDynamicIncludesTwigRule;
 
 use PhpStanTwigAnalysis\Twig\Rule\AbstractTwigRuleTest;
 
-final class NoDynamicIncludesRuleTest extends AbstractTwigRuleTest
+final class NoDynamicIncludesTwigRuleTest extends AbstractTwigRuleTest
 {
     public function testSkipTemplateUsesConstantInclude(): void
     {

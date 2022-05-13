@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpStanTwigAnalysis\Twig\Rule\FilterNotFoundRule;
+namespace PhpStanTwigAnalysis\Twig\Rule\FilterNotFoundTwigRule;
 
 use PhpStanTwigAnalysis\Twig\Rule\AbstractTwigRuleTest;
 
-final class FilterNotFoundRuleTest extends AbstractTwigRuleTest
+final class FilterNotFoundTwigRuleTest extends AbstractTwigRuleTest
 {
     public function testSkipTemplateUsesExistingFilter(): void
     {

@@ -1,6 +1,6 @@
 services:
     -
-        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenVariablesRule
+        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenVariablesTwigRule
         arguments:
             - %twig.forbidden_variables%
         tags:

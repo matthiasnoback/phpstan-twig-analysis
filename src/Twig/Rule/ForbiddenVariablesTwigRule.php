@@ -9,7 +9,7 @@ use PhpStanTwigAnalysis\Twig\TwigRule;
 use Twig\Node\Expression\NameExpression;
 use Twig\Node\Node;
 
-final class ForbiddenVariablesRule implements TwigRule
+final class ForbiddenVariablesTwigRule implements TwigRule
 {
     /**
      * @param array<string> $forbiddenVariables

@@ -1,5 +1,5 @@
 services:
     -
-        class: PhpStanTwigAnalysis\Twig\Rule\FilterNotFoundRule
+        class: PhpStanTwigAnalysis\Twig\Rule\FilterNotFoundTwigRule
         tags:
             - twig_rule

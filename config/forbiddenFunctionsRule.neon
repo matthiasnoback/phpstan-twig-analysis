@@ -1,6 +1,6 @@
 services:
     -
-        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsRule
+        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsTwigRule
         arguments:
             - %twig.forbidden_functions%
         tags:

@@ -9,7 +9,7 @@ use PhpStanTwigAnalysis\Twig\TwigRule;
 use Twig\Node\Expression\FunctionExpression;
 use Twig\Node\Node;
 
-final class ForbiddenFunctionsRule implements TwigRule
+final class ForbiddenFunctionsTwigRule implements TwigRule
 {
     /**
      * @param array<string> $forbiddenFunctions
