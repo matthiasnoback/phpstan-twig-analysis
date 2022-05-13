@@ -1,6 +1,6 @@
 includes:
-    - ../parametersSchema.neon
-    - ../services.neon
+    - ../config/parametersSchema.neon
+    - ../config/services.neon
 
 parametersSchema:
     template_dir: string()

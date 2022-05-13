@@ -47,6 +47,6 @@ final class LoadingTwigEnvironmentFromSymfonyContainerTest extends PHPStanTestCa
 
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../../extension.neon', __DIR__ . '/../../symfony.neon', __DIR__ . '/phpstan.neon'];
+        return [__DIR__ . '/../../config/extension.neon', __DIR__ . '/../../config/symfony.neon', __DIR__ . '/phpstan.neon'];
     }
 }

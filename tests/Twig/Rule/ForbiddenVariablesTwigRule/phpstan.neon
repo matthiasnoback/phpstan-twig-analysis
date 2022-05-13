@@ -1,5 +1,5 @@
 includes:
-    - ../../../../config/forbiddenVariablesRule.neon
+    - ../../../../config/rule/forbiddenVariablesRule.neon
 
 parameters:
     twig:

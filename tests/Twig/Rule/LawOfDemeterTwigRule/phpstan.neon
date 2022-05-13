@@ -1,5 +1,5 @@
 includes:
-    - ../../../../config/lawOfDemeterRule.neon
+    - ../../../../config/rule/lawOfDemeterRule.neon
 
 parameters:
     twig:

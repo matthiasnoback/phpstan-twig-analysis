@@ -1,6 +1,0 @@
-includes:
-    - config/functionNotFoundRule.neon
-    - config/filterNotFoundRule.neon
-    - config/forbiddenFunctionsRule.neon
-    - config/forbiddenVariablesRule.neon
-    - config/noDynamicIncludesRule.neon
