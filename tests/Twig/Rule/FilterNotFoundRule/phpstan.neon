@@ -1,2 +1,2 @@
 includes:
-    - ../../../../filterNotFoundRule.neon
+    - ../../../../config/filterNotFoundRule.neon
