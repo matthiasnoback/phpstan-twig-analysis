@@ -1,0 +1,6 @@
+includes:
+    - ../../../../config/rule/forbiddenFunctionsRule.neon
+
+parameters:
+    twig:
+        forbidden_functions: [dump]

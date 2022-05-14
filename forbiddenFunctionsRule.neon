@@ -1,7 +1,0 @@
-services:
-    -
-        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenFunctionsRule
-        arguments:
-            - %twig.forbidden_functions%
-        tags:
-            - twig_rule

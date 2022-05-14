@@ -1,6 +1,0 @@
-includes:
-    - ../../../../lawOfDemeterRule.neon
-
-parameters:
-    twig:
-        maximum_number_of_dots: 2

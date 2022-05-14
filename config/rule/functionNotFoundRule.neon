@@ -1,0 +1,5 @@
+services:
+    -
+        class: PhpStanTwigAnalysis\Twig\Rule\FunctionNotFoundTwigRule
+        tags:
+            - twig_rule

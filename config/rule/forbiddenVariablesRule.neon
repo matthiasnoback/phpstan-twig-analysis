@@ -1,0 +1,7 @@
+services:
+    -
+        class: PhpStanTwigAnalysis\Twig\Rule\ForbiddenVariablesTwigRule
+        arguments:
+            - %twig.forbidden_variables%
+        tags:
+            - twig_rule

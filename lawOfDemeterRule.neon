@@ -1,7 +1,0 @@
-services:
-    -
-        class: PhpStanTwigAnalysis\Twig\Rule\LawOfDemeterRule
-        tags:
-            - twig_rule
-        arguments:
-            - %twig.maximum_number_of_dots%

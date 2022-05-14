@@ -1,0 +1,6 @@
+includes:
+    - rule/functionNotFoundRule.neon
+    - rule/filterNotFoundRule.neon
+    - rule/forbiddenFunctionsRule.neon
+    - rule/forbiddenVariablesRule.neon
+    - rule/noDynamicIncludesRule.neon

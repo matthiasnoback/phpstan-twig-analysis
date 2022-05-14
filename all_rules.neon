@@ -1,6 +1,0 @@
-includes:
-    - functionNotFoundRule.neon
-    - filterNotFoundRule.neon
-    - forbiddenFunctionsRule.neon
-    - forbiddenVariablesRule.neon
-    - noDynamicIncludesRule.neon
