@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\PhpStan;
@@ -10,8 +11,7 @@ final class IncludedFrom
     public function __construct(
         private string $file,
         private int $line,
-    )
-    {
+    ) {
     }
 
     public static function twigNode(Node $node): self

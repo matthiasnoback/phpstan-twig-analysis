@@ -87,7 +87,10 @@ final class CheckTwigRulesRule implements Rule
      */
     private function collectUnusedTemplates(TwigAnalysis $analysis): array
     {
-        $usedTemplatePaths = array_map(fn (ResolvedTemplate $template) => $template->resolvedFilePath, $analysis->analyzedTemplates());
+        $usedTemplatePaths = array_map(
+            fn (ResolvedTemplate $template) => $template->resolvedFilePath,
+            $analysis->analyzedTemplates()
+        );
 
         $allTemplateFiles = $this->twigAnalyzer->collectAllTemplateFilePaths();
 

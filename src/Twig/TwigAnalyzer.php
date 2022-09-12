@@ -76,7 +76,6 @@ final class TwigAnalyzer
     }
 
     /**
-     * @param LoaderInterface $loader
      * @return array<string>>
      */
     private function collectTwigFilePathsFromLoader(LoaderInterface $loader): array
@@ -95,7 +94,9 @@ final class TwigAnalyzer
             }
         }
 
-        return array_map(fn (SplFileInfo $fileInfo) => $fileInfo->getRealPath(),
-            iterator_to_array(Finder::create()->in($directories)->name('*.twig')->files()));
+        return array_map(
+            fn (SplFileInfo $fileInfo) => $fileInfo->getRealPath(),
+            iterator_to_array(Finder::create()->in($directories)->name('*.twig')->files())
+        );
     }
 }

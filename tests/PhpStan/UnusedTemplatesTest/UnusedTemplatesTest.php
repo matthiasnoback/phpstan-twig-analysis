@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\PhpStan\UnusedTemplatesTest;
@@ -14,10 +15,7 @@ final class UnusedTemplatesTest extends RuleTestCase
 {
     public function testTwigTemplateIsUnused(): void
     {
-        $this->analyse(
-            [__DIR__ . '/Templates/TemplateIncludesAnotherTemplate.php'],
-            [['Template is unused', 1]],
-        );
+        $this->analyse([__DIR__ . '/Templates/TemplateIncludesAnotherTemplate.php'], [['Template is unused', 1]],);
     }
 
     public static function getAdditionalConfigFiles(): array
