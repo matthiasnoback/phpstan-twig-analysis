@@ -15,3 +15,10 @@ services:
         class: PhpStanTwigAnalysis\Twig\TwigAnalyzer
         arguments:
             twigRules: tagged(twig_rule)
+            twigFactory: @cachedTwigFactory
+
+    cachedTwigFactory:
+        class: PhpStanTwigAnalysis\Twig\CachedTwigFactory
+        autowired: false
+        arguments:
+            realFactory: @PhpStanTwigAnalysis\Twig\TwigFactory
