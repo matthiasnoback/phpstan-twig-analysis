@@ -27,3 +27,6 @@ services:
         autowired: false
         arguments:
             realFactory: @PhpStanTwigAnalysis\Twig\TwigFactory
+
+    -
+        class: PhpStanTwigAnalysis\PhpStan\ExtractTemplateName
