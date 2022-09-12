@@ -5,61 +5,61 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\PhpStan;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
+use PhpStanTwigAnalysis\Twig\ResolvedTemplate;
+use PhpStanTwigAnalysis\Twig\TemplateFilePaths;
 use PhpStanTwigAnalysis\Twig\TwigAnalysis;
 use PhpStanTwigAnalysis\Twig\TwigAnalyzer;
 use PhpStanTwigAnalysis\Twig\TwigError;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Twig\Environment;
 use Twig\Error\LoaderError;
 
 /**
- * @implements Rule<MethodCall>
+ * @implements Rule<CollectedDataNode>
  */
 final class CheckTwigRulesRule implements Rule
 {
     public function __construct(
         private TwigAnalyzer $twigAnalyzer,
+        private bool $reportUnusedTemplates,
+        private TemplateFilePaths $templateFilePaths
     ) {
     }
 
     public function getNodeType(): string
     {
-        return MethodCall::class;
+        return CollectedDataNode::class;
     }
 
     /**
-     * @param MethodCall $node
+     * @param CollectedDataNode $node
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (! $this->isCallToTwigRender($node, $scope->getType($node->var))) {
-            return [];
+        /** @var array<string, array<array{string,int}>> $allData */
+        $allData = $node->get(CollectTwigTemplateNames::class);
+
+        $templates = [];
+        foreach ($allData as $file => $collectedData) {
+            foreach ($collectedData as $renderCall) {
+                $templates[] = new IncludedTemplate(new IncludedFrom($file, $renderCall[1]), $renderCall[0]);
+            }
         }
 
-        if (! isset($node->getArgs()[0])) {
-            // The method call has no arguments
-            return [];
+        $twigAnalysis = TwigAnalysis::startWith($templates);
+
+        $errors = $this->keepAnalyzingUntilDone($twigAnalysis);
+
+        if ($this->reportUnusedTemplates) {
+            foreach ($this->collectUnusedTemplates($twigAnalysis) as $templateFile) {
+                $errors[] = RuleErrorBuilder::message('Template is unused')->file($templateFile)->line(1)->build();
+            }
         }
 
-        $firstArgument = $node->getArgs()[0];
-        $firstArgumentType = $scope->getType($firstArgument->value);
-        if (! $firstArgumentType instanceof ConstantStringType) {
-            // The first argument is not a constant string
-            return [];
-        }
-
-        $templateName = $firstArgumentType->getValue();
-
-        return $this->keepAnalyzingUntilDone(TwigAnalysis::startWith($templateName));
+        return $errors;
     }
 
     /**
@@ -67,11 +67,14 @@ final class CheckTwigRulesRule implements Rule
      */
     private function keepAnalyzingUntilDone(TwigAnalysis $twigAnalysis): array
     {
-        while ($templateName = $twigAnalysis->nextTemplate()) {
+        while ($template = $twigAnalysis->nextTemplate()) {
             try {
-                $this->twigAnalyzer->analyze($templateName, $twigAnalysis);
+                $this->twigAnalyzer->analyze($template, $twigAnalysis);
             } catch (LoaderError $loaderError) {
-                return [RuleErrorBuilder::message($loaderError->getMessage())->build()];
+                return [RuleErrorBuilder::message($loaderError->getMessage())
+                    ->file($template->includedFrom->file())
+                    ->line($template->includedFrom->line())
+                    ->build(), ];
             }
         }
 
@@ -81,21 +84,18 @@ final class CheckTwigRulesRule implements Rule
         );
     }
 
-    private function isCallToTwigRender(MethodCall $node, Type $objectType): bool
+    /**
+     * @return array<string>
+     */
+    private function collectUnusedTemplates(TwigAnalysis $analysis): array
     {
-        if ((new ObjectType(Environment::class))
-            ->isSuperTypeOf($objectType)
-            ->yes()) {
-            return $node->name instanceof Identifier && $node->name->toString() === 'render';
-        }
+        $usedTemplatePaths = array_map(
+            fn (ResolvedTemplate $template) => $template->resolvedFilePath,
+            $analysis->analyzedTemplates()
+        );
 
-        if ((new ObjectType(AbstractController::class))
-            ->isSuperTypeOf($objectType)
-            ->yes()) {
-            return $node->name instanceof Identifier &&
-                ($node->name->toString() === 'render' || $node->name->toString() === 'renderView');
-        }
+        $allTemplateFiles = $this->templateFilePaths->collectAll();
 
-        return false;
+        return array_diff($allTemplateFiles, $usedTemplatePaths);
     }
 }

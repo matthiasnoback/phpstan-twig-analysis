@@ -1,10 +1,32 @@
 services:
     -
+        class: PhpStanTwigAnalysis\PhpStan\CollectTwigTemplateNames
+        tags:
+            - phpstan.collector
+
+    -
         class: PhpStanTwigAnalysis\PhpStan\CheckTwigRulesRule
         tags:
             - phpstan.rules.rule
+        arguments:
+            reportUnusedTemplates: %twig.report_unused_templates%
 
     -
         class: PhpStanTwigAnalysis\Twig\TwigAnalyzer
         arguments:
             twigRules: tagged(twig_rule)
+            twigFactory: @cachedTwigFactory
+
+    -
+        class: PhpStanTwigAnalysis\Twig\TemplateFilePaths
+        arguments:
+            twigFactory: @cachedTwigFactory
+
+    cachedTwigFactory:
+        class: PhpStanTwigAnalysis\Twig\CachedTwigFactory
+        autowired: false
+        arguments:
+            realFactory: @PhpStanTwigAnalysis\Twig\TwigFactory
+
+    -
+        class: PhpStanTwigAnalysis\PhpStan\ExtractTemplateName

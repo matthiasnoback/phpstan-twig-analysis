@@ -1,0 +1,4 @@
+parameters:
+    template_dir: tests/PhpStan/UnusedTemplatesTest/Templates
+    twig:
+        report_unused_templates: true

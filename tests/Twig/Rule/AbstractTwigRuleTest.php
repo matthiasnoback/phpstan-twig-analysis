@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\Twig\Rule;
 
 use PHPStan\Testing\PHPStanTestCase;
+use PhpStanTwigAnalysis\PhpStan\IncludedFrom;
+use PhpStanTwigAnalysis\PhpStan\IncludedTemplate;
 use PhpStanTwigAnalysis\Twig\TwigAnalysis;
 use PhpStanTwigAnalysis\Twig\TwigAnalyzer;
 use PhpStanTwigAnalysis\Twig\TwigError;
@@ -44,8 +46,10 @@ abstract class AbstractTwigRuleTest extends PHPStanTestCase
         /** @var TwigAnalyzer $twigAnalyzer */
         $twigAnalyzer = self::getContainer()->getByType(TwigAnalyzer::class);
 
-        $twigAnalysis = TwigAnalysis::startWith($templatePathname);
-        $twigAnalyzer->analyze($templatePathname, $twigAnalysis);
+        $template = new IncludedTemplate(new IncludedFrom('unknown', 1), $templatePathname);
+
+        $twigAnalysis = TwigAnalysis::startWith([$template]);
+        $twigAnalyzer->analyze($template, $twigAnalysis);
 
         $expectedErrorsAsString = implode(
             "\n",
