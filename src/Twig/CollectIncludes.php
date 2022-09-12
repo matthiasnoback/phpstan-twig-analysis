@@ -8,6 +8,7 @@ use PhpStanTwigAnalysis\PhpStan\IncludedFrom;
 use PhpStanTwigAnalysis\PhpStan\IncludedTemplate;
 use Twig\Environment;
 use Twig\Node\Expression\ConstantExpression;
+use Twig\Node\ImportNode;
 use Twig\Node\IncludeNode;
 use Twig\Node\ModuleNode;
 use Twig\Node\Node;
@@ -24,6 +25,11 @@ final class CollectIncludes implements NodeVisitorInterface
      * @var array<ModuleNode>
      */
     private array $moduleNodes = [];
+
+    /**
+     * @var array<ImportNode>
+     */
+    private array $importNodes = [];
 
     /**
      * @return array<IncludedTemplate>
@@ -52,7 +58,18 @@ final class CollectIncludes implements NodeVisitorInterface
             )
         );
 
-        return array_merge($includedTemplates, $extendedTemplates);
+        $importedTemplates = array_map(
+            fn (ConstantExpression $expr): IncludedTemplate => new IncludedTemplate(
+                IncludedFrom::twigNode($expr),
+                $expr->getAttribute('value')
+            ),
+            array_filter(
+                array_map(fn (ImportNode $node): Node => $node->getNode('expr'), $this->importNodes),
+                fn (Node $expr): bool => $expr instanceof ConstantExpression,
+            )
+        );
+
+        return array_merge($includedTemplates, $extendedTemplates, $importedTemplates);
     }
 
     public function enterNode(Node $node, Environment $env): Node
@@ -63,6 +80,10 @@ final class CollectIncludes implements NodeVisitorInterface
 
         if ($node instanceof ModuleNode && $node->hasNode('parent')) {
             $this->moduleNodes[] = $node;
+        }
+
+        if ($node instanceof ImportNode) {
+            $this->importNodes[] = $node;
         }
 
         return $node;
