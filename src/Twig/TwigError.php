@@ -42,12 +42,8 @@ final class TwigError
 
     public function asPhpStanError(): RuleError
     {
-        $phpstanError = RuleErrorBuilder::message(
-            sprintf('%s, in %s:%d', $this->error, $this->path(), $this->line),
-        )->metadata([
-            'template_file' => $this->path(),
-            'template_line' => $this->line(),
-        ]);
+        $phpstanError = RuleErrorBuilder::message(sprintf('%s', $this->error),)->file($this->path())
+            ->line($this->line());
 
         if ($this->tip !== null) {
             $phpstanError->tip($this->tip);

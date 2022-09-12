@@ -1,5 +1,10 @@
 services:
     -
+        class: PhpStanTwigAnalysis\PhpStan\CollectTwigTemplateNames
+        tags:
+            - phpstan.collector
+
+    -
         class: PhpStanTwigAnalysis\PhpStan\CheckTwigRulesRule
         tags:
             - phpstan.rules.rule

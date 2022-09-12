@@ -14,22 +14,16 @@ final class CheckTwigRuleTest extends RuleTestCase
     /**
      * @dataProvider fixturesWithACallToRender
      */
-    public function testTwigTemplateHasError(string $fixture, int $lineNumber): void
+    public function testTwigTemplateHasError(string $fixture): void
     {
-        $this->analyse(
-            [$fixture],
-            [['Error in template, in tests/PhpStan/Fixtures/template.html.twig:1', $lineNumber]]
-        );
+        $this->analyse([$fixture], [['Error in template', 1]]);
     }
 
     public function testTwigTemplateIncludesAnotherTemplate(): void
     {
         $this->analyse(
             [__DIR__ . '/Fixtures/TemplateIncludesAnotherTemplate.php'],
-            [
-                ['Error in template, in tests/PhpStan/Fixtures/template-includes-another-template.html.twig:1', 15],
-                ['Error in template, in tests/PhpStan/Fixtures/another-template.html.twig:1', 15],
-            ],
+            [['Error in template', 1], ['Error in template', 1]],
         );
     }
 
@@ -37,16 +31,7 @@ final class CheckTwigRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/Fixtures/TemplateRecursivelyIncludesAnotherTemplate.php'],
-            [
-                [
-                    'Error in template, in tests/PhpStan/Fixtures/template-recursively-includes-another-template.html.twig:1',
-                    15,
-                ],
-                [
-                    'Error in template, in tests/PhpStan/Fixtures/includes-recursively-including-template.html.twig:1',
-                    15,
-                ],
-            ],
+            [['Error in template', 1], ['Error in template', 1]],
         );
     }
 
@@ -64,14 +49,14 @@ final class CheckTwigRuleTest extends RuleTestCase
     }
 
     /**
-     * @return array<string,array{string,int}>
+     * @return array<string,array{string}>
      */
     public function fixturesWithACallToRender(): array
     {
         return [
-            'Basic Twig Environment' => [__DIR__ . '/Fixtures/ControllerUsesTwigRender.php', 15],
-            'Symfony AbstractController::render()' => [__DIR__ . '/Fixtures/ControllerUsesThisRender.php', 14],
-            'Symfony AbstractController::renderView()' => [__DIR__ . '/Fixtures/ControllerUsesThisRenderView.php', 14],
+            'Basic Twig Environment' => [__DIR__ . '/Fixtures/ControllerUsesTwigRender.php'],
+            'Symfony AbstractController::render()' => [__DIR__ . '/Fixtures/ControllerUsesThisRender.php'],
+            'Symfony AbstractController::renderView()' => [__DIR__ . '/Fixtures/ControllerUsesThisRenderView.php'],
         ];
     }
 
@@ -93,6 +78,11 @@ final class CheckTwigRuleTest extends RuleTestCase
     public static function getAdditionalConfigFiles(): array
     {
         return [__DIR__ . '/../extension_test.neon', __DIR__ . '/phpstan.neon'];
+    }
+
+    protected function getCollectors(): array
+    {
+        return [self::getContainer()->getByType(CollectTwigTemplateNames::class)];
     }
 
     protected function getRule(): CheckTwigRulesRule

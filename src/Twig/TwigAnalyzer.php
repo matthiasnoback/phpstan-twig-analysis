@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\Twig;
 
+use PhpStanTwigAnalysis\PhpStan\IncludedTemplate;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
@@ -26,12 +27,12 @@ final class TwigAnalyzer
     /**
      * @throws LoaderError
      */
-    public function analyze(string $templateName, TwigAnalysis $twigAnalysis): void
+    public function analyze(IncludedTemplate $template, TwigAnalysis $twigAnalysis): void
     {
         $source = $this->twig->getLoader()
-            ->getSourceContext($templateName);
+            ->getSourceContext($template->templateName);
 
-        $twigAnalysis->addAnalyzedTemplate($templateName);
+        $twigAnalysis->addAnalyzedTemplate($template);
 
         // We have our own rules for finding undefined functions and don't want the parser to trigger a "SyntaxError"
         UnknownFunctionCallback::catchAllUnknownFunctions($this->twig, true);
@@ -58,6 +59,6 @@ final class TwigAnalyzer
         $nodeTraverser->traverse($nodeTree);
 
         $twigAnalysis->addErrors($collectErrors->errors());
-        $twigAnalysis->addTemplatesToBeAnalyzed($collectIncludes->includedTemplateNames());
+        $twigAnalysis->addTemplatesToBeAnalyzed($collectIncludes->includedTemplates());
     }
 }

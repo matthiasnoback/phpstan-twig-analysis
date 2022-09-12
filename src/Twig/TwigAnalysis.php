@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\Twig;
 
+use PhpStanTwigAnalysis\PhpStan\IncludedTemplate;
+
 final class TwigAnalysis
 {
     /**
-     * @param array<string> $analyzedTemplates
+     * @param array<string, IncludedTemplate> $analyzedTemplates
      * @param array<TwigError> $twigErrors
-     * @param array<string> $templatesToBeAnalyzed
+     * @param array<string, IncludedTemplate> $templatesToBeAnalyzed
      */
     private function __construct(
         private array $analyzedTemplates,
@@ -18,9 +20,12 @@ final class TwigAnalysis
     ) {
     }
 
-    public static function startWith(string $template): self
+    /**
+     * @param array<IncludedTemplate> $templatesToBeAnalyzed
+     */
+    public static function startWith(array $templatesToBeAnalyzed): self
     {
-        return new self([], [], [$template]);
+        return new self([], [], $templatesToBeAnalyzed);
     }
 
     /**
@@ -45,26 +50,30 @@ final class TwigAnalysis
     }
 
     /**
-     * @param array<string> $moreTemplates
+     * @param array<IncludedTemplate> $moreTemplates
      */
     public function addTemplatesToBeAnalyzed(array $moreTemplates): void
     {
         foreach ($moreTemplates as $template) {
-            if (in_array($template, $this->analyzedTemplates, true)) {
+            if (isset($this->analyzedTemplates[$template->templateName])) {
                 continue;
             }
 
-            $this->templatesToBeAnalyzed[] = $template;
+            if (isset($this->templatesToBeAnalyzed[$template->templateName])) {
+                continue;
+            }
+
+            $this->templatesToBeAnalyzed[$template->templateName] = $template;
         }
     }
 
-    public function nextTemplate(): string|null
+    public function nextTemplate(): ?IncludedTemplate
     {
         return array_shift($this->templatesToBeAnalyzed);
     }
 
-    public function addAnalyzedTemplate(string $templateName): void
+    public function addAnalyzedTemplate(IncludedTemplate $template): void
     {
-        $this->analyzedTemplates[] = $templateName;
+        $this->analyzedTemplates[$template->templateName] = $template;
     }
 }
