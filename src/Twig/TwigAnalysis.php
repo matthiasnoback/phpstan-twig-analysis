@@ -9,13 +9,19 @@ use PhpStanTwigAnalysis\PhpStan\IncludedTemplate;
 final class TwigAnalysis
 {
     /**
-     * @param array<string, IncludedTemplate> $analyzedTemplates
-     * @param array<TwigError> $twigErrors
+     * @var array<string, ResolvedTemplate>
+     */
+    private array $analyzedTemplates = [];
+
+    /**
+     * @var array<TwigError>
+     */
+    private array $twigErrors = [];
+
+    /**
      * @param array<string, IncludedTemplate> $templatesToBeAnalyzed
      */
     private function __construct(
-        private array $analyzedTemplates,
-        private array $twigErrors,
         private array $templatesToBeAnalyzed,
     ) {
     }
@@ -25,7 +31,7 @@ final class TwigAnalysis
      */
     public static function startWith(array $templatesToBeAnalyzed): self
     {
-        return new self([], [], $templatesToBeAnalyzed);
+        return new self($templatesToBeAnalyzed);
     }
 
     /**
@@ -72,8 +78,16 @@ final class TwigAnalysis
         return array_shift($this->templatesToBeAnalyzed);
     }
 
-    public function addAnalyzedTemplate(IncludedTemplate $template): void
+    public function addAnalyzedTemplate(ResolvedTemplate $template): void
     {
-        $this->analyzedTemplates[$template->templateName] = $template;
+        $this->analyzedTemplates[$template->includedTemplate->templateName] = $template;
+    }
+
+    /**
+     * @return array<ResolvedTemplate>
+     */
+    public function analyzedTemplates(): array
+    {
+        return array_values($this->analyzedTemplates);
     }
 }

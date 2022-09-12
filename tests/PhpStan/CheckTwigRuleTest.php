@@ -77,7 +77,7 @@ final class CheckTwigRuleTest extends RuleTestCase
 
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../extension_test.neon', __DIR__ . '/phpstan.neon'];
+        return [__DIR__ . '/../extension_test.neon', __DIR__ . '/register_dummy_rule.neon'];
     }
 
     protected function getCollectors(): array

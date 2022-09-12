@@ -2,7 +2,8 @@ parametersSchema:
     twig: structure([
         forbidden_functions: schema(listOf(string()), nullable()),
         forbidden_variables: schema(listOf(string()), nullable()),
-        maximum_number_of_dots: schema(integer(), nullable())
+        maximum_number_of_dots: schema(integer(), nullable()),
+        report_unused_templates: schema(boolean(), nullable()),
     ])
 
 parameters:
@@ -10,4 +11,4 @@ parameters:
         forbidden_functions: []
         forbidden_variables: []
         maximum_number_of_dots: null
-
+        report_unused_templates: false

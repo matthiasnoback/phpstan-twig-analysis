@@ -15,7 +15,8 @@
     },
     "require": {
         "twig/twig": "^3.3",
-        "php": "^8.0"
+        "php": "^8.0",
+        "symfony/finder": "^6.1"
     },
     "autoload": {
         "psr-4": {

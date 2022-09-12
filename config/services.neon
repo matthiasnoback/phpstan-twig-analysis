@@ -8,6 +8,8 @@ services:
         class: PhpStanTwigAnalysis\PhpStan\CheckTwigRulesRule
         tags:
             - phpstan.rules.rule
+        arguments:
+            reportUnusedTemplates: %twig.report_unused_templates%
 
     -
         class: PhpStanTwigAnalysis\Twig\TwigAnalyzer

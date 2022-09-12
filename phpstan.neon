@@ -5,4 +5,5 @@ parameters:
         - tests
     excludePaths:
         - tests/PhpStan/Fixtures
+        - tests/PhpStan/UnusedTemplatesTest/Templates
         - tests/Symfony/var

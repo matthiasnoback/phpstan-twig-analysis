@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpStanTwigAnalysis\Twig;
 
+use PhpStanTwigAnalysis\PhpStan\IncludedFrom;
 use PhpStanTwigAnalysis\PhpStan\IncludedTemplate;
 use Twig\Environment;
 use Twig\Node\Expression\ConstantExpression;
@@ -25,8 +26,7 @@ final class CollectIncludes implements NodeVisitorInterface
     {
         return array_map(
             fn (ConstantExpression $expr): IncludedTemplate => new IncludedTemplate(
-                $expr->getTemplateName() ?: 'unknown',
-                $expr->getTemplateLine(),
+                IncludedFrom::twigNode($expr),
                 $expr->getAttribute('value')
             ),
             array_filter(

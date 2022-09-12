@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace PhpStanTwigAnalysis\Twig;
 
 use PhpStanTwigAnalysis\PhpStan\IncludedTemplate;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\FilesystemLoader;
+use Twig\Loader\LoaderInterface;
 use Twig\NodeTraverser;
 
 final class TwigAnalyzer
@@ -32,7 +37,7 @@ final class TwigAnalyzer
         $source = $this->twig->getLoader()
             ->getSourceContext($template->templateName);
 
-        $twigAnalysis->addAnalyzedTemplate($template);
+        $twigAnalysis->addAnalyzedTemplate(new ResolvedTemplate($template, $source->getPath()));
 
         // We have our own rules for finding undefined functions and don't want the parser to trigger a "SyntaxError"
         UnknownFunctionCallback::catchAllUnknownFunctions($this->twig, true);
@@ -60,5 +65,37 @@ final class TwigAnalyzer
 
         $twigAnalysis->addErrors($collectErrors->errors());
         $twigAnalysis->addTemplatesToBeAnalyzed($collectIncludes->includedTemplates());
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function collectAllTemplateFilePaths(): array
+    {
+        return $this->collectTwigFilePathsFromLoader($this->twig->getLoader());
+    }
+
+    /**
+     * @param LoaderInterface $loader
+     * @return array<string>>
+     */
+    private function collectTwigFilePathsFromLoader(LoaderInterface $loader): array
+    {
+        $directories = [];
+
+        if ($loader instanceof ChainLoader) {
+            foreach ($loader->getLoaders() as $subLoader) {
+                $directories = array_merge($directories, $this->collectTwigFilePathsFromLoader($subLoader));
+            }
+        } elseif ($loader instanceof FilesystemLoader) {
+            foreach ($loader->getNamespaces() as $namespace) {
+                foreach ($loader->getPaths($namespace) as $path) {
+                    $directories[] = $path;
+                }
+            }
+        }
+
+        return array_map(fn (SplFileInfo $fileInfo) => $fileInfo->getRealPath(),
+            iterator_to_array(Finder::create()->in($directories)->name('*.twig')->files()));
     }
 }
