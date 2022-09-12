@@ -29,7 +29,6 @@ final class ForbiddenVariablesTwigRule implements TwigRule
     public function processNode(Node $node): array
     {
         $variableName = $node->getAttribute('name');
-        var_dump($variableName);
 
         if (! in_array($variableName, $this->forbiddenVariables, true)) {
             return [];

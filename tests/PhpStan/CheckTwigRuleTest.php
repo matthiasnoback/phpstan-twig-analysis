@@ -35,6 +35,22 @@ final class CheckTwigRuleTest extends RuleTestCase
         );
     }
 
+    public function testTwigTemplateExtendsAnotherTemplate(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/Fixtures/TemplateExtendsAnotherTemplate.php'],
+            [['Error in template', 1], ['Error in template', 1]],
+        );
+    }
+
+    public function testTwigTemplateImportsAnotherTemplate(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/Fixtures/TemplateImportsAnotherTemplate.php'],
+            [['Error in template', 1], ['Error in template', 1]],
+        );
+    }
+
     public function testTwigTemplateNotFound(): void
     {
         $this->analyse(
