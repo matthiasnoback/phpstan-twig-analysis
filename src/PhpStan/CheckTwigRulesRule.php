@@ -11,6 +11,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PhpStanTwigAnalysis\Twig\ResolvedTemplate;
+use PhpStanTwigAnalysis\Twig\TemplateFilePaths;
 use PhpStanTwigAnalysis\Twig\TwigAnalysis;
 use PhpStanTwigAnalysis\Twig\TwigAnalyzer;
 use PhpStanTwigAnalysis\Twig\TwigError;
@@ -24,6 +25,7 @@ final class CheckTwigRulesRule implements Rule
     public function __construct(
         private TwigAnalyzer $twigAnalyzer,
         private bool $reportUnusedTemplates,
+        private TemplateFilePaths $templateFilePaths
     ) {
     }
 
@@ -92,7 +94,7 @@ final class CheckTwigRulesRule implements Rule
             $analysis->analyzedTemplates()
         );
 
-        $allTemplateFiles = $this->twigAnalyzer->collectAllTemplateFilePaths();
+        $allTemplateFiles = $this->templateFilePaths->collectAll();
 
         return array_diff($allTemplateFiles, $usedTemplatePaths);
     }

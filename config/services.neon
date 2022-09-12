@@ -17,6 +17,11 @@ services:
             twigRules: tagged(twig_rule)
             twigFactory: @cachedTwigFactory
 
+    -
+        class: PhpStanTwigAnalysis\Twig\TemplateFilePaths
+        arguments:
+            twigFactory: @cachedTwigFactory
+
     cachedTwigFactory:
         class: PhpStanTwigAnalysis\Twig\CachedTwigFactory
         autowired: false
